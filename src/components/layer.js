@@ -16,12 +16,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 
-// ∆∆∆ DEBUG
+
+
+// <<< HARD-CODED for debugging
 import { getGoldenColor } from '../tools/debug'
 let counter = 0
-// DEBUG ∆∆∆
-
-// <<< HARD-CODED
 const DEBUG_HEIGHT = "0.5vh"
 // HARD-CODED >>>
 

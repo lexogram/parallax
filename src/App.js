@@ -38,6 +38,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components'
 
 import Layer from './components/layer'
+import getJSON from './api/getJSON'
 
 
 
@@ -83,10 +84,13 @@ class App extends Component {
     , bottom: LAYER_BOTTOM
     }
 
+    this.treatJSON = this.treatJSON.bind(this)
     this.setHeightAndRatio = this.setHeightAndRatio.bind(this)
     window.addEventListener("resize", this.setHeightAndRatio, false)
 
     this.viewPortRef = React.createRef()
+
+    getJSON("/scenes/test.json", this.treatJSON)
   }
 
 
@@ -101,6 +105,11 @@ class App extends Component {
     const ratio = width / height
 
     this.setState({ height, ratio })
+  }
+
+
+  treatJSON(error, json) {
+    console.log("error:", error, "json:", json)
   }
 
 
