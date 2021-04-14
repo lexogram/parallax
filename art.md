@@ -1,1 +1,1 @@
-Would you add some graphs?
+Would you add some pictures?
