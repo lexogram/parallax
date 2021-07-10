@@ -1,30 +1,25 @@
 /**
  * /src/api/getJSON.js
-*/
-
-
+ */
 
 import axios from "axios";
 
-
-
 const getJSON = (filename, callback) => {
+  console.log("filename:", filename);
 
   const returnJSON = (response) => {
-    let error = null
-    let json
+    let error = null;
+    let json;
 
     try {
-      json = response.data
+      json = response.data;
     } catch (err) {
-      error = err
+      error = err;
     }
-    callback(error, json)
-  }
-
+    callback(error, json);
+  };
 
   axios.get(filename).then(returnJSON);
-}
+};
 
-
-export default getJSON
+export default getJSON;

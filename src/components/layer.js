@@ -1,15 +1,17 @@
 /**
  * /src/components/layer.js
  *
- * Creates a <div> at a given translateZ, and sets its left and width so that it
- * fits the viewPort exactly, without altering the scrollWidth.
+ * Creates a <div> at a given translateZ, and sets its left and width
+ * so that it fits the viewPort exactly, without altering the
+ * scrollWidth.
  *
- * The aspect-ratio of the parent section will affect the left and width values,
- * so these will be recalculated each time the window is resized.
+ * The aspect-ratio of the parent section will affect the left and
+ * width values, so these will be recalculated each time the window is
+ * resized.
  *
- * TODO: Delete counter, background-color, name, the name paragraph and the
- * `& p` CSS rules associated with it, which are used for debugging purposes
- * only
+ * TODO: Delete counter, background-color, name, the name paragraph and
+ * the `& p` CSS rules associated with it, which are used for debugging
+ * purposes only
  */
 
 
