@@ -40,6 +40,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import ScrollMark from "./components/scrollmark";
 import Layer from "./components/layer";
 import getJSON from "./api/getJSON";
 
@@ -48,7 +49,7 @@ const CUT_OFF = 57.2; // 54.2         // determined by trial and error
 // Allows a window height as low as 480px
 const LAYER_BOTTOM = "39%"; // determined by trial and error
 
-const BG_WIDTH = 400; // vh
+const BG_WIDTH = 800; // vh
 const VIEWPORT_WIDTH = 200; // vh
 
 const PERSPECTIVE = 100; // px
@@ -112,18 +113,35 @@ class App extends Component {
     }
 
     if (!error) {
-      const layers = json.layers;
-      this.setState({ layers });
+      // json should be { scrollmarks, layers }
+      this.setState( json );
     } else {
       console.log("error in JSON:", error);
     }
   }
 
+  getScrollMarks() {
+    let scrollmarks = [];
+
+    if (this.viewPortRef.current && this.state.scrollmarks) {
+      // Epiphany (webkit) will show layers beyond 78
+      // below the fold(unseen)
+      scrollmarks = this.state.scrollmarks.map((mark) => {
+        return <ScrollMark
+          key={mark.name}
+          {...mark}
+          bgWidth={this.state.bgWidth}
+        />;
+      });
+    }
+
+    return scrollmarks;
+  }
+
   getLayers() {
     let layers = [];
-    const viewPort = this.viewPortRef.current;
 
-    if (viewPort && this.state.layers) {
+    if (this.viewPortRef.current && this.state.layers) {
       // Epiphany (webkit) will show layers beyond 78
       // below the fold(unseen)
       layers = this.state.layers.map((layer) => {
@@ -135,13 +153,15 @@ class App extends Component {
   }
 
   render() {
+    const scrollmarks = this.getScrollMarks();
     const layers = this.getLayers();
 
-    return <StyledSection
-      ref={this.viewPortRef}
-    >
-      {layers}
-    </StyledSection>;
+    return (
+      <StyledSection ref={this.viewPortRef}>
+        {scrollmarks}
+        {layers}
+      </StyledSection>
+    );
   }
 
   componentDidMount() {

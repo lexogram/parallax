@@ -31,7 +31,11 @@ const DEBUG_HEIGHT = "0.5vh";
  * , height:     <number - height of parent section in pixels>
  * , left:       <number - left of div to be flush with left at scroll 0>
  * , ratio:      <number - ratio of width / height of parent section>
+ *
  * , theme:      {}
+ *
+ * , name:       <string>
+ * , index:      <integer>
  * , translateZ: <number - 0 - 88: translateZ value for this div>
  * , width:      <number - width of div to not affect scrollWidth of parent>
  *

@@ -91,29 +91,29 @@
       "index": 18
     }
   ],
-  "bookmarks": [
+  "scrollmarks": [
     {
       "name": "one",
-      "center": "10%",
-      "width": "20%",
+      "center": "0.125",
+      "width": "0.25",
       "debug_color": "#900"
     },
     {
       "name": "two",
-      "center": "40%",
-      "width": "40%",
+      "center": "0.40",
+      "width": "0.30",
       "debug_color": "#090"
     },
     {
       "name": "three",
-      "center": "70%",
-      "width": "20%",
+      "center": "0.65",
+      "width": "0.20",
       "debug_color": "#009"
     },
     {
       "name": "four",
-      "center": "90%",
-      "width": "20%",
+      "center": "0.875",
+      "width": "0.25",
       "debug_color": "#909"
     }
   ]
