@@ -13,6 +13,7 @@ const getJSON = (filename, callback) => {
 
     try {
       json = response.data;
+      console.log("json:", json)
     } catch (err) {
       error = err;
     }

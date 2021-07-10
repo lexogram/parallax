@@ -1,25 +1,120 @@
-[ {
-    "name": "one"
-  , "center": "10%"
-  , "width": "20%"
-  , "debug_color": "#900"
-  }
-, {
-    "name": "two",
-    "center": "40%",
-    "width": "40%",
-    "debug_color": "#090"
-  }
-, {
-    "name": "three",
-    "center": "70%",
-    "width": "20%",
-    "debug_color": "#009"
-  }
-, {
-    "name": "four",
-    "center": "90%",
-    "width": "20%",
-    "debug_color": "#909"
-  }
-]
+{
+  "layers": [
+    {
+      "translateZ": 0,
+      "name": "Layer 0",
+      "index": 1
+    },
+    {
+      "translateZ": 5,
+      "name": "Layer 5",
+      "index": 2
+    },
+    {
+      "translateZ": 10,
+      "name": "Layer 10",
+      "index": 3
+    },
+    {
+      "translateZ": 15,
+      "name": "Layer 15",
+      "index": 4
+    },
+    {
+      "translateZ": 20,
+      "name": "Layer 20",
+      "index": 5
+    },
+    {
+      "translateZ": 25,
+      "name": "Layer 25",
+      "index": 6
+    },
+    {
+      "translateZ": 30,
+      "name": "Layer 30",
+      "index": 7
+    },
+    {
+      "translateZ": 35,
+      "name": "Layer 35",
+      "index": 8
+    },
+    {
+      "translateZ": 40,
+      "name": "Layer 40",
+      "index": 9
+    },
+    {
+      "translateZ": 45,
+      "name": "Layer 45",
+      "index": 10
+    },
+    {
+      "translateZ": 50,
+      "name": "Layer 50",
+      "index": 11
+    },
+    {
+      "translateZ": 55,
+      "name": "Layer 55",
+      "index": 12
+    },
+    {
+      "translateZ": 57.2,
+      "name": "Layer 57.2",
+      "index": 13
+    },
+    {
+      "translateZ": 60,
+      "name": "Layer 60",
+      "index": 14
+    },
+    {
+      "translateZ": 65,
+      "name": "Layer 65",
+      "index": 15
+    },
+    {
+      "translateZ": 70,
+      "name": "Layer 70",
+      "index": 16
+    },
+    {
+      "translateZ": 75,
+      "name": "Layer 75",
+      "index": 17
+    },
+    {
+      "translateZ": 80,
+      "name": "Layer 80",
+      "index": 18
+    }
+  ],
+  "bookmarks": [
+    {
+      "name": "one",
+      "center": "10%",
+      "width": "20%",
+      "debug_color": "#900"
+    },
+    {
+      "name": "two",
+      "center": "40%",
+      "width": "40%",
+      "debug_color": "#090"
+    },
+    {
+      "name": "three",
+      "center": "70%",
+      "width": "20%",
+      "debug_color": "#009"
+    },
+    {
+      "name": "four",
+      "center": "90%",
+      "width": "20%",
+      "debug_color": "#909"
+    }
+  ]
+}

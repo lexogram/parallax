@@ -57,6 +57,8 @@ const PERSPECTIVE_ORIGIN = "50% 50%"; // may be tweaked
 const BG_COLOR = "#333"; // arbitrary dark color
 // HARD-CODED >>>
 
+
+
 const StyledSection = styled.section`
   position: relative;
   height: 100%;
@@ -86,7 +88,6 @@ class App extends Component {
 
     this.viewPortRef = React.createRef();
 
-    console.log("Calling getJSON");
     getJSON("/scenes/test.json", this.treatJSON);
   }
 
@@ -104,42 +105,29 @@ class App extends Component {
   }
 
   treatJSON(error, json) {
-    console.log("error:", error, "json:", json);
+    if (!this.viewPortRef.current) {
+      // The component has not been mounted yet. React.StrictMode
+      // is just testing
+      return;
+    }
+
+    if (!error) {
+      const layers = json.layers;
+      this.setState({ layers });
+    } else {
+      console.log("error in JSON:", error);
+    }
   }
 
   getLayers() {
     let layers = [];
     const viewPort = this.viewPortRef.current;
 
-    if (viewPort) {
-      // Epiphany (webkit) will show layers beyond 78 below the fold (unseen)
-      layers = [
-        0,
-        5,
-        10,
-        15,
-        20,
-        25,
-        30,
-        35,
-        40,
-        45,
-        50,
-        55,
-        this.state.cutOff,
-        60,
-        65,
-        70,
-        75,
-        80
-      ].map((translateZ, index) => {
-        return (
-          <Layer
-            {...this.state}
-            key={`layer_${index}`}
-            translateZ={translateZ}
-          />
-        );
+    if (viewPort && this.state.layers) {
+      // Epiphany (webkit) will show layers beyond 78
+      // below the fold(unseen)
+      layers = this.state.layers.map((layer) => {
+        return <Layer {...this.state} key={layer.name} {...layer} />;
       });
     }
 
@@ -149,7 +137,11 @@ class App extends Component {
   render() {
     const layers = this.getLayers();
 
-    return <StyledSection ref={this.viewPortRef}>{layers}</StyledSection>;
+    return <StyledSection
+      ref={this.viewPortRef}
+    >
+      {layers}
+    </StyledSection>;
   }
 
   componentDidMount() {

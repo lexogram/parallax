@@ -14,18 +14,13 @@
  * purposes only
  */
 
-
-import React, { Component } from 'react';
-import styled from 'styled-components'
-
-
+import React, { Component } from "react";
+import styled from "styled-components";
 
 // <<< HARD-CODED for debugging
-import { getGoldenColor } from '../tools/debug'
-let counter = 0
-const DEBUG_HEIGHT = "0.5vh"
+import { getGoldenColor } from "../tools/debug";
+const DEBUG_HEIGHT = "0.5vh";
 // HARD-CODED >>>
-
 
 /**
  * ${ props => console.log(props) }
@@ -46,38 +41,43 @@ const StyledDiv = styled.div`
   position: absolute;
 
   height: ${DEBUG_HEIGHT};
-  background-color: ${props => getGoldenColor({ number: props.number })};
+  background-color: ${(props) => getGoldenColor({ number: props.number })};
 
-  bottom: ${props => props.bottom};
-  transform: translateZ(${props => props.translateZ}px);
-  left: ${props => props.left}vh;
-  width: ${props => props.width}vh;
+  bottom: ${(props) => props.bottom};
+  transform: translateZ(${(props) => props.translateZ}px);
+  left: ${(props) => props.left}vh;
+  width: ${(props) => props.width}vh;
 
   & p {
     position: absolute;
     bottom: 0;
     margin: 0;
   }
-`
-
-
+`;
 
 export default class Layer extends Component {
   getDimensions() {
-    const { bgWidth, cutOff, ratio, translateZ } = this.props
-    const customWidth = translateZ < cutOff
-    const left = (translateZ * ratio / 2)
-    let width
+    // bgWidth (in vh units) and cutOff (in transformZ) are hard-
+    // coded in the App.js script
+    // ratio (width / height) is set on componentDidMount()
+    // translateZ is read from an array.
+    const { bgWidth, cutOff, ratio, translateZ } = this.props;
+    const customWidth = translateZ < cutOff;
+    const left = (translateZ * ratio) / 2;
+    let width;
 
     if (customWidth) {
-      width = bgWidth
-            - (bgWidth / 100 * translateZ)
-            + (Math.pow((translateZ / 10), 2) * (ratio / 2))
+      // Use Chrome's quirky width for layers behind the cutOff
+      width =
+        bgWidth -
+        (bgWidth / 100) * translateZ +
+        Math.pow(translateZ / 10, 2) * (ratio / 2);
     } else {
-      width = (bgWidth - translateZ * ratio)
+      // Use Firefox's logical width
+      width = bgWidth - translateZ * ratio;
     }
 
-    return { left, width }
+    return { left, width };
   }
 
   /**
@@ -92,17 +92,14 @@ export default class Layer extends Component {
    * , key:        <unique string for this element>
    */
   render() {
-    const name = `Layer ${++counter}`
-    const dimensions = this.getDimensions() // calculates left and width
+    const name = this.props.name;
+    const index = this.props.index
+    const dimensions = this.getDimensions(); // left and width
 
     return (
-      <StyledDiv
-        {...this.props}
-        {...dimensions}
-        number={counter}
-      >
+      <StyledDiv {...this.props} {...dimensions} number={index}>
         <p>{name}</p>
       </StyledDiv>
-    )
+    );
   }
 }
