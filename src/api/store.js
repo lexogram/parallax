@@ -124,7 +124,6 @@ class Store {
       // Ensure that caller cannot alter filter inadvertently
       filter = [...filter];
     } else {
-      const type = typeof filter;
       filter = false;
     }
 
@@ -170,7 +169,6 @@ class Store {
   }
 
   _getFilteredState(filter, state = storeState, error = [], depth = 0) {
-    const type = typeof filter;
     let branch;
 
     if (!Array.isArray(filter)) {
@@ -224,6 +222,7 @@ class Store {
       if (!listener || listenerObject.listener === listener) {
         return !filter || listenerObject.filter === filter;
       }
+      return false // unnecessary but it keeps the linter happy
     });
 
     return listeners;
