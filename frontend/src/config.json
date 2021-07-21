@@ -1,0 +1,4 @@
+{
+  "BACKEND": "http://localhost:3001",
+  "SPLASH_DELAY": 1000
+}
