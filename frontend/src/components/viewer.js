@@ -44,8 +44,8 @@ import styled from "styled-components";
 import ScrollMark from "./scrollmark";
 import Layer from "./layer";
 
-// Managers
-import ScrollController from "../controllers/scroll";
+// Extensions
+import ScrollController from "../extensions/scroll";
 
 // API
 import getJSON from "../api/getJSON";

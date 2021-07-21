@@ -88,3 +88,11 @@ export const valuesMatch = (a, b) => {
 
   return true;
 };
+
+
+
+export const resetObject = (object) => {
+  for (var property in object) {
+    delete object[property]
+  }
+}

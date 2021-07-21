@@ -32,22 +32,25 @@
 import { valuesMatch } from "../tools/utilities.js";
 
 let storeState = {};
+// <<< REMOVE WHEN NOT DEBBUGGING
+window.storeState = storeState
+// REMOVE WHEN NOT DEBBUGGING >>>
+
 
 class Store {
-  constructor(state) {
-    this.initializeState(state);
+  constructor() {
+    this.initializeState(storeState);
     this.listeners = new Set();
     this.removeListener = this.removeListener.bind(this);
   }
 
   initializeState(state) {
-    if (typeof state !== "object") {
-      state = {};
-    }
+    const keys = Object.keys(storeState)
+    keys.forEach(key => delete storeState[key])
 
-    storeState = state;
+    Object.assign(storeState, state)
 
-    return storeState === state;
+    return valuesMatch(storeState, state);
   }
 
   setState(newState, filter) {
