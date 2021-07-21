@@ -38,7 +38,11 @@ class Account {
     if (demo) {
       // In demo mode, simply load the demo story
       account = {};
+<<<<<<< HEAD
       // console.log("account:", account);
+=======
+      console.log("account:", account);
+>>>>>>> 2876f44784610b61a87a6a8eb44f2c94aaecabe5
 
       Courier.getData("story"); // no id given
     } else {

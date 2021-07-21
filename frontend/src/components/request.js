@@ -20,7 +20,11 @@ const StyledRequest = styled.div`
 
 class Request extends Component {
   render() {
+<<<<<<< HEAD
     // console.log("Request props:", this.props)
+=======
+    console.log("Request props:", this.props)
+>>>>>>> 2876f44784610b61a87a6a8eb44f2c94aaecabe5
     return <StyledRequest id="request" {...this.props}></StyledRequest>;
   }
 }
