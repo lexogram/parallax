@@ -7,7 +7,7 @@
  * handOver() calls set up by the Courier instance will be triggered.
  */
 
-import { Component } from "react";
+import React, { Component } from "react";
 
 // Data
 import Store from "./api/store";
@@ -17,10 +17,23 @@ import Account from "./api/account";
 import { extend } from './tools/utilities';
 
 // Extensions
-import GetPage from './extensions/getpage'
+import GetPage from "./extensions/getpage";
+import AspectRatio from "./extensions/ratio";
 
 const config = require("./config.json");
-const SPLASH_DELAY  = config.SPLASH_DELAY || 2000
+const SPLASH_DELAY = config.SPLASH_DELAY || 2000
+
+const ViewPort = ({ viewport, children }) => {
+  return (
+    <div
+      id="viewport"
+      ref={viewport}
+      style={{ position: "relative", width: "100%", height: "100%", maxWidth: "200vh", maxHeight: "200vw"}}
+    >
+      {children}
+    </div>
+  );
+};
 
 
 class App extends Component {
@@ -30,6 +43,9 @@ class App extends Component {
     // All the technicalities are taken care of in a separate
     // script whose methods are added to this instance.
     extend(this, GetPage);
+    extend(this, AspectRatio);
+
+    this.viewPortRef = React.createRef();
 
     this.handOver = this.handOver.bind(this);
     this.pageChange = this.pageChange.bind(this);
@@ -53,7 +69,7 @@ class App extends Component {
 
     if (this.pageSet) {
       // ... hide it already if another page has been set
-      console.log("Hiding splash after", SPLASH_DELAY)
+      // console.log("Hiding splash after", SPLASH_DELAY)
       this.pageChange(this.pageSet)
       this.pageSet = 0
     }
@@ -75,7 +91,7 @@ class App extends Component {
       return
     }
 
-    console.log("Showing the new page")
+    // console.log("Showing the new page")
     this.setState(newPage); // just used to force App to render
   }
 
@@ -85,7 +101,12 @@ class App extends Component {
 
   render() {
     const page = this.getPage(); // in extensions/getpage.js
-    return page;
+    return (<ViewPort
+      viewport={this.viewPortRef}
+    >
+      {page}
+    </ViewPort>
+    );
   }
 
   componentDidMount() {
@@ -93,9 +114,13 @@ class App extends Component {
     this.mounted = true;
 
     // We can now start handling pageChange callbacks from the Store
+    this.initializeHeightAndRatio(); // in extensions/aspect.js
+
     Store.addListener(this.pageChange, ["page"]);
     Store.addListener(this.handOver, ["delivery"]);
     Account.createAccount();
+
+
   }
 }
 

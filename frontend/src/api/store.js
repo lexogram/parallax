@@ -88,7 +88,7 @@ class Store {
     return true;
   }
 
-  addListener(listener, filter) {
+  addListener(listener, filter, callNow) {
     if (typeof listener !== "function") {
       return;
     }
@@ -96,6 +96,12 @@ class Store {
     filter = this._sanitizeFilter(filter); // array or false
 
     this.listeners.add({ listener, filter });
+
+    if (callNow) {
+      const state = this._getState(filter)
+      listener(state)
+    }
+
     return () => this.removeListener(listener, filter);
   }
 

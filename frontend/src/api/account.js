@@ -38,7 +38,7 @@ class Account {
     if (demo) {
       // In demo mode, simply load the demo story
       account = {};
-      console.log("account:", account);
+      // console.log("account:", account);
 
       Courier.getData("story"); // no id given
     } else {

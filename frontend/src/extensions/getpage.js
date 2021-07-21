@@ -69,7 +69,7 @@ class GetPage {
     // This is received via App.handOver() after Courier tells
     // Store about a delivery request or completion.
 
-    console.log("setPageFor delivery:", delivery);
+    // console.log("setPageFor delivery:", delivery);
 
     switch (delivery.type) {
       case "account":

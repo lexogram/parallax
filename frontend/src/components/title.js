@@ -1,12 +1,12 @@
 /**
- * src/components/title.jsx
+ * src/components/title.js
  */
 
 import { Component } from "react";
 import styled from "styled-components";
 
 const StyledTitle = styled.h1`
-  background-: #fee;
+  font-size: 10vmin;
 `;
 
 class Title extends Component {
