@@ -119,8 +119,6 @@ class App extends Component {
     Store.addListener(this.pageChange, ["page"]);
     Store.addListener(this.handOver, ["delivery"]);
     Account.createAccount();
-
-
   }
 }
 
