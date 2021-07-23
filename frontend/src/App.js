@@ -88,10 +88,12 @@ class App extends Component {
       // Ensure tha the splash page remains visible for at
       // least SPLASH_DELAY milliseconds
       this.pageSet = newPage
+      console.log("newPage:", newPage)
       return
     }
 
-    // console.log("Showing the new page")
+    console.log("Showing the new page")
+
     this.setState(newPage); // just used to force App to render
   }
 

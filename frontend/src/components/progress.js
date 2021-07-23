@@ -31,7 +31,7 @@ const StyledProgress = styled.div`
   & img {
     position: absolute;
     height: 100%;
-    right: 50%;
+    right: ${props => props.progress}%;
   }
 
   & div:last-child {
@@ -43,11 +43,13 @@ class Progress extends Component {
   constructor(props) {
     super(props);
     this.setProgress = this.setProgress.bind(this);
+    this.state = { progress: 0 }
   }
 
   render() {
+    const progress = (1 - this.state.progress) * 100
     return (
-      <StyledProgress id="progress-bar">
+      <StyledProgress id="progress-bar" progress={progress}>
         <div></div>
         <img src="/img/train.svg" alt="train" />
         <div></div>

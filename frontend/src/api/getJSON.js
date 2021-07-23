@@ -12,6 +12,21 @@
  */
 
 import axios from "axios";
+import Store from "./store";
+
+const setProgressInStore = (event) => {
+  const { lengthComputable, loaded, total } = event
+  let progress = 0
+  if (lengthComputable) {
+    progress = loaded / total // value from 0.0 to 1.0
+  }
+  console.log("progress event:", progress);
+  Store.setState({ progress })
+}
+
+const config = {
+  onDownloadProgress: setProgressInStore
+}
 
 const getJSON = (route, callback) => {
   const returnJSON = (response) => {
@@ -37,7 +52,7 @@ const getJSON = (route, callback) => {
     callback(error);
   };
 
-  axios.get(route)
+  axios.get(route, config)
     .then(returnJSON)
     .catch(treatError);
 };
