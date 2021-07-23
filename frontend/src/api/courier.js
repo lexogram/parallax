@@ -17,7 +17,7 @@ const BACKEND = config.BACKEND
 
 
 class Courier {
-  getData(type, id = "") {
+  getData(type, id = 0) {
     const delivery = {
       id,
       type,
@@ -34,7 +34,7 @@ class Courier {
         console.log("Courier error:", error)
       }
 
-      const status = error ? "fail" : "complete"
+      const status = error ? "fail" : "roster"
       const delivery = {
         id,
         type,

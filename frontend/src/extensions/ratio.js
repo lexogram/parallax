@@ -12,7 +12,6 @@ import Store from "../api/store";
 
 class AspectRatio {
   initializeHeightAndRatio() {
-    console.log("setHeightAndRatio")
     this.setHeightAndRatio = this.setHeightAndRatio.bind(this)
     window.addEventListener("resize", this.setHeightAndRatio, false);
 

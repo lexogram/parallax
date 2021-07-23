@@ -21,13 +21,19 @@ const cors = require("cors");
 
 // ROUTES
 const welcomePage = require("./routes/welcome");
-const story = require("./routes/story");
+const story =
+
+  require("./routes/story");
+// const test = require("./routes/test");
 
 // EXPRESS will be launched after the MongoDB connection is ready
 const launchApp = (Mongoose) => {
+  console.log("launching App:")
   const app = express();
 
   app.use(cors(corsOptions));
+  app.use(express.json())
+  // app.use(test);
   app.use(story);
   app.use(welcomePage);
 

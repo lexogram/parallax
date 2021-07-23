@@ -38,10 +38,17 @@ import Splash from "../components/splash";
 import Request from "../components/request";
 import Title from "../components/title";
 import Endless from "../components/endless";
+import Progress from "../components/progress";
+import Background from "../components/background";
 // import Viewer from "../components/viewer";
 
 // Utilities
 import { resetObject } from "../tools/utilities";
+
+const components = {
+  Endless,
+  Progress
+};
 
 class GetPage {
   getPage() {
@@ -124,12 +131,47 @@ class GetPage {
     }
 
     resetObject(this.pageOptions);
-    const children = this.getChildren(id, "endless");
+    const options = {
+      title: id,
+      component: "Endless"
+    }
+    const children = this.getChildren(options);
     this.pageOptions.children = children;
     return "request";
   }
 
-  setStoryRosterPage() {}
+  setStoryRosterPage(payload) {
+    // console.log("setStoryRosterPage payload:", payload);
+    // { age_range:    [<integer>, <integer>]
+    // , creation_date: <Date>;
+    // , l10n:{
+    //     author:  [<string>];
+    //   , keyword: [];
+    //   , summary: <string>;
+    //   , theme:   [<string>, ...]
+    //   , title:   <string>;
+    //   , voice:   [<string>];
+    //   }
+    // , modification_date: <Date>;
+    // , name: <string>;
+    // , sequence_ids: [];
+    // , splash_screen: <url>
+    // }
+
+    const { l10n, splash_screen } = payload
+    const { title } = l10n
+
+    resetObject(this.pageOptions);
+    const options = {
+      title,
+      background: splash_screen,
+      component: "Progress"
+    }
+    const children = this.getChildren(options)
+    this.pageOptions.children = children;
+    return "request";
+
+  }
 
   setStoryPreviewPage() {}
 
@@ -137,16 +179,21 @@ class GetPage {
 
   setStoryScene() {}
 
-  getChildren(...args) {
-    const children = args.map((argument) => {
-      switch (argument) {
-        case "endless":
-          return <Endless
-            key="endless"
-          />;
+  getChildren(options) {
+    const keys = Object.keys(options)
+    const children = keys.map((key) => {
+      const value = options[key] // with Capital for component
 
+      switch (key) {
+        case "component":
+          const Component = components[value]
+          return <Component key={value} />;
+        case "title":
+          return <Title key="title">{value}</Title>;
+        case "background":
+          return <Background key="background" src={value} />
         default:
-          return <Title key="title">{argument}</Title>;
+          return "keep the linter happy"
       }
     });
 

@@ -17,6 +17,7 @@ const StyledEndless = styled.div`
   height: 20vmin;
   width: 100%;
   background-color: #0000000f;
+  z-index: 1;
 
   & div {
     position: absolute;
