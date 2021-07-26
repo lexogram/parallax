@@ -20,19 +20,13 @@ const example = {
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const MetaDataSchema = new Schema({
+const L10nSchema = new Schema({
   title: { type: String, required: true },
   author: { type: [String], required: true },
   voice: { type: [String], required: true },
   theme: { type: [String], required: true },
   keyword: { type: [String], required: true },
   summary: { type: String, required: true },
-  _id: false
-});
-
-const L10nSchema = new Schema({
-  type: Map,
-  of: MetaDataSchema,
   _id: false
 });
 
@@ -43,7 +37,7 @@ const schema = new Schema({
   modification_date: { type: Date, required: true },
   age_range: { type: [Number], required: true },
   sequence_ids: { type: [String], required: true },
-  l10n: { type: MetaDataSchema, required: true }
+  l10n: { type: L10nSchema, required: true }
 });
 
 const model = mongoose.model("Story", schema);
