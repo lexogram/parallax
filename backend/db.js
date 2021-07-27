@@ -7,8 +7,17 @@ if (result && result.error) {
 }
 
 // Connecting to MongoDB
-const { MONGODB, DB_NAME } = process.env;
-const mongoDB = `${MONGODB}${DB_NAME}`;
+const { MONGODB, DB_NAME, TEST_DB_NAME, NODE_ENV } = process.env;
+const dbName = (NODE_ENV === "test")
+  ? TEST_DB_NAME
+  : DB_NAME
+
+if (!dbName || !MONGODB) {
+  const message = `process.env does not contain data necessary to open a MongoDB connection:\n* MONGODB: ${MONGODB}\n* DB_NAME: ${DB_NAME}\n* TEST_DB_NAME: ${TEST_DB_NAME} (used if NODE_ENV === "test")\n* NODE_ENV: ${NODE_ENV}`
+  throw new Error(message)
+}
+
+const mongoDB = `${MONGODB}${dbName}`;
 
 const mongoose = require("mongoose");
 

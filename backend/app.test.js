@@ -9,10 +9,11 @@ function rootPathTest() {
 
 function getMethodTest(done) {
   const { app, closeApp } = openApp();
+  const result = { done, silent: false }
 
   const checkResponse = (response) => {
     expect(response.statusCode).toBe(200);
-    closeApp(done);
+    closeApp(result);
   };
 
   request(app).get("/").then(checkResponse);
