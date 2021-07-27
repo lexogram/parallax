@@ -42,12 +42,19 @@ const openApp = (parameters) => {
 
   const server = app.listen(PORT, startUpCallback);
 
-  const closeApp = (done) => {
+  const closeApp = (result) => {
+    const { done, error, silent } = result
     server.close();
-    console.log(`Express server on port ${PORT} closed`);
+    
+    if (!silent) {
+      console.log(`Express server on port ${PORT} closed`);
+    }
+
     if (typeof done === "function") {
-      done();
-      console.log("done() called after closing server");
+      done(error);
+      if (!silent) {
+        console.log("done() called after closing server");
+      }
     }
   };
 

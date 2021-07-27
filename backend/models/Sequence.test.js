@@ -4,10 +4,9 @@
  *
  */
 
+const mongoose = require('mongoose')
 const openDB = require("../db"); // Promise
 const SequenceModel = require("./Sequence");
-
-const TIMEOUT_DELAY = 3000
 
 const allData = {
   storyId: "all",
@@ -165,67 +164,71 @@ const testDocuments = [allData, minimumData];
 describe("Test the mongoose models", testMongooseModels)
 
 function testMongooseModels() {
+  const closeConnection = () => {
+    const db = mongoose.connection
+    db.dropDatabase().then(() => {
+      db.close()
+    })
+  }
+
+  beforeAll(() => openDB)
+
+  afterAll(closeConnection)
+
+  expect.assertions(6)
+
   test("Sequence Model is valid", testSequenceModel);
 }
 
 function testSequenceModel(done) {
-  const result = { done, silent: false }
-  expect.assertions(6)
+  let counter = testDocuments.length
 
-  openDB.then(runTest)
+  testDocuments.forEach(expectedData => {
 
-  function runTest({ db, closeDB, mongoose }) {
-    setTimeoutToCloseConnection(TIMEOUT_DELAY)
+    const sequence = new SequenceModel(expectedData);
 
-    testDocuments.forEach(expectedData => {
-      const sequence = new SequenceModel(expectedData);
+    sequence.save((error, doc) => {
+      try {
+        expect(error).toBeNull()
 
-      sequence.save((error, doc) => {
-        try {
-          expect(error).toBeNull()
+        const { storyId } = expectedData
+        const query = { storyId }
+        // Ask mongoose for a POJO, not a Mongoose Document
+        // https://mongoosejs.com/docs/tutorials/lean.html
+        SequenceModel.findOne(query, callback).lean()
 
-          const { storyId } = expectedData
-          const query = { storyId }
-          // Ask mongoose for a POJO, not a Mongoose Document
-          // https://mongoosejs.com/docs/tutorials/lean.html
-          SequenceModel.findOne(query, callback).lean()
-
-        } catch (error) {
-          result.error = error
-        }
-      })
-
-      function callback(error, retrievedData) {
-        if (error) {
-          result.error = error
-        }
-
-        try {
-          expect(retrievedData).not.toBeNull()
-
-          if (retrievedData) {
-            // Dates in retrievedData include time zone info
-            retrievedData = simplifyDates(retrievedData)
-            // Remove properties added automatically by mongoose
-            delete retrievedData._id;
-            delete retrievedData.__v;
-
-            expect(retrievedData).toEqual(expectedData)
-          }
-        } catch (error) {
-          result.error = error
+      } catch (error) {
+        // Tests for this data block are now complete
+        if (!--counter) {
+          done(error)
         }
       }
     })
 
-    function setTimeoutToCloseConnection(delay) {
-      setTimeout(() => {
-        db.dropDatabase().then(() => {
-          closeDB(result)
-        })
-      }, delay)
+    function callback(error, retrievedData) {
+      try {
+        expect(retrievedData).not.toBeNull()
+
+        if (retrievedData) {
+          // Dates in retrievedData include time zone info
+          retrievedData = simplifyDates(retrievedData)
+          // Remove properties added automatically by mongoose
+          delete retrievedData._id;
+          delete retrievedData.__v;
+
+          expect(retrievedData).toEqual(expectedData)
+        }
+      } catch (error) {
+        if (!--counter) {
+          done(error)
+        }
+      }
+
+      if (!--counter) {
+        done(error)
+      }
     }
-  }
+  })
 }
 
 
