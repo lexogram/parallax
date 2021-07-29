@@ -8,7 +8,7 @@ if (result && result.error) {
 
 const { PORT, CORS_ORIGIN } = process.env;
 const corsOptions = {
-  origin: CORS_ORIGIN,
+  origin: CORS_ORIGIN.split(","),
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
@@ -45,7 +45,7 @@ const openApp = (parameters) => {
   const closeApp = (result) => {
     const { done, error, silent } = result
     server.close();
-    
+
     if (!silent) {
       console.log(`Express server on port ${PORT} closed`);
     }

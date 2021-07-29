@@ -26,6 +26,10 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "collectCoverage": false,
+    "testPathIgnorePatterns" : [
+      "models/S.*"
+    ],
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]

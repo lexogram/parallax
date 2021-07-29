@@ -32,7 +32,8 @@ const openDB = new Promise((resolve, reject) => {
   mongoose
     .connect(mongoDB, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useFindAndModify: false
     })
     .then(connectionIsOpen)
     .catch((error) => {

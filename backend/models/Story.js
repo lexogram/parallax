@@ -37,7 +37,7 @@ const schema = new Schema({
   modification_date: { type: Date, required: true },
   age_range: { type: [Number], required: true },
   sequence_ids: { type: [String], required: true },
-  l10n: { type: L10nSchema, required: true }
+  l10n: { type: Map, of: L10nSchema, required: true }
 });
 
 const model = mongoose.model("Story", schema);

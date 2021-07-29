@@ -17,16 +17,38 @@ async function getStories(request, response) {
 }
 
 async function newStory(request, response) {
-  const storyData = request.body;
+  const update = request.body;
+  const { name } = update
+  const query = { name }
   let result;
-  try {
-    result = new Story(storyData);
-    await result.save();
-  } catch (error) {
-    response.status(404);
-    result = { error: error.message };
+  // try {
+  //   result = new Story(storyData);
+  //   await result.save();
+  // } catch (error) {
+  //   response.status(404);
+  //   result = { error: error.message };
+  // }
+  // response.send(result);
+
+  const options = {
+    new: true,
+    upsert: true
   }
-  response.send(result);
+
+  const callback = function (error, result) {
+    if (error) {
+      response.status(404);
+      result = { error: error.message };
+    }
+    response.send(result);
+  }
+
+  Story.findOneAndUpdate(
+    query,
+    update,
+    options,
+    callback
+  ).lean();
 }
 
 async function getStoryByName(request, response) {
