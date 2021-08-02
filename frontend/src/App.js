@@ -1,126 +1,122 @@
 /**
- * /src/App.js
+ * frontend/src/App.js
  *
- * The App component is mounted and renders once before it gets
- * Account to check whether the current user has registered. This
- * ensures that the splash screen is shown, and that all the
- * handOver() calls set up by the Courier instance will be triggered.
+ * The App component has a simple role. When it mounts, its starts
+ * the process of checking the LocalStorage for user account data.
+ * This can be in one of five formats, each of which gives different
+ * access rights:
+ *
+ * - Missing.
+ *   This indicates that the device owner is a Guest
+ * - Adherent
+ *   The device owner has provided an email address
+ * - Subscriber
+ *   The device owner has paid a subscription
+ * - Author
+ *   The device owner can save changes to certain titles
+ * - Admin
+ *   The device owner is part of the development team
+ *
+ * This App component will:
+ * => Display a Splash screen while the account details are being
+ *    read into the Store (and for a minimum period, if that is
+ *    longer)
+ * => Display a Routing componenent (Reader or Author
+ *    depending on the Store settings, thereafter.
  */
 
-import React, { Component } from "react";
+// React
+import { Component } from "react";
 
-// Data
+// API
 import Store from "./api/store";
 import Account from "./api/account";
+import Preferences from "./api/preferences";
 
-// Utilities
-import { extend } from './tools/utilities';
+// Components
+import Splash from "./components/Splash";
+import Routing from "./components/Routing";
 
-// Extensions
-import GetPage from "./extensions/getpage";
-import AspectRatio from "./extensions/ratio";
-
+// Config
 const config = require("./config.json");
-const SPLASH_DELAY = config.SPLASH_DELAY || 2000
-
-const ViewPort = ({ viewport, children }) => {
-  return (
-    <div
-      id="viewport"
-      ref={viewport}
-      style={{ position: "relative", width: "100%", height: "100%", maxWidth: "200vh", maxHeight: "200vw"}}
-    >
-      {children}
-    </div>
-  );
-};
-
+const SPLASH_DELAY = config.SPLASH_DELAY || 2000;
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this.state = {};
 
-    // All the technicalities are taken care of in a separate
-    // script whose methods are added to this instance.
-    extend(this, GetPage);
-    extend(this, AspectRatio);
-
-    this.viewPortRef = React.createRef();
-
-    this.handOver = this.handOver.bind(this);
-    this.pageChange = this.pageChange.bind(this);
+    this.accountUpdate = this.accountUpdate.bind(this);
+    this.preferenceUpdate = this.preferenceUpdate.bind(this);
     this.hideSplash = this.hideSplash.bind(this);
 
-    this.pageOptions = {};
-
-    this.state = {
-      page: "loading"
-    };
-    Store.setState(this.state);
-
-    this.pageSet = 0
     this.splashOut = setTimeout(this.hideSplash, SPLASH_DELAY);
+  }
+
+  accountUpdate({ account }) {
+    // Three scenarios:
+    // 1. There is no account data ({}). In this case, the visitor i
+    //    a guest, and we should start loading the demo story
+    // 2. The account data is just what was read from localStorage,
+    //    and there is no Preferences data. In this case, we need
+    //    to get the full account data from the database.
+    // 3. The full account data has been received from the database,
+    //    so we can apply the startUp preferences.
+    // In all three cases, we can start requesting remote data and
+    // updating Store, even before the SPLASH_DELAY is over.
+
+    if (!account._id) {
+      // Case 1.
+    } else {
+      // Case 2.
+    }
+
+    if (this.splashOut) {
+      // Ensure that the splash page remains visible for at
+      // least SPLASH_DELAY milliseconds
+      this.account = account;
+      return;
+    }
+
+    this.setState({ account });
+  }
+
+  preferenceUpdate() {
+
   }
 
   hideSplash() {
     // Called by the timeout that was set in the constructor.
     // The splash screen has been visible for long enough...
-    this.splashOut = 0
+    this.splashOut = 0;
+    const account = this.account;
 
-    if (this.pageSet) {
-      // ... hide it already if another page has been set
+    if (account) {
+      // ... so hide it already if the account has been set
       // console.log("Hiding splash after", SPLASH_DELAY)
-      this.pageChange(this.pageSet)
-      this.pageSet = 0
+      this.accountUpdate({ account });
     }
   }
 
-  /**
-   * pageChange listens to changes to ["page"] in the Store.
-   * When the Store registers a change to the page, the App
-   * should re-render with the new page.
-   *
-   * @param {*} newPage
-   * @memberof App
-   */
-  pageChange(newPage) {
-    if (this.splashOut) {
-      // Ensure tha the splash page remains visible for at
-      // least SPLASH_DELAY milliseconds
-      this.pageSet = newPage
-      console.log("newPage:", newPage)
-      return
+  getSplashOrRouter() {
+    if (this.state.account) {
+      // undefined | {} | { _id: ... }
+      return <Routing />;
+    } else {
+      return <Splash />;
     }
-
-    console.log("Showing the new page")
-
-    this.setState(newPage); // just used to force App to render
-  }
-
-  handOver({ delivery }) {
-    this.setPageFor(delivery) // in getpage script
   }
 
   render() {
-    const page = this.getPage(); // in extensions/getpage.js
-    return (<ViewPort
-      viewport={this.viewPortRef}
-    >
-      {page}
-    </ViewPort>
-    );
+    const component = this.getSplashOrRouter();
+    return component;
   }
 
   componentDidMount() {
-    // Not called after first render in StrictMode
-    this.mounted = true;
-
-    // We can now start handling pageChange callbacks from the Store
-    this.initializeHeightAndRatio(); // in extensions/aspect.js
-
-    Store.addListener(this.pageChange, ["page"]);
-    Store.addListener(this.handOver, ["delivery"]);
+    Store.addListener(this.accountUpdate, ["account"]);
+    Store.addListener(this.preferenceUpdate, ["preferences"]);
     Account.createAccount();
+    Preferences.createPreferences();
   }
 }
 

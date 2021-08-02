@@ -33,32 +33,22 @@ class Account {
     // available, a new getPage() call will be triggeerd in <App/>.
 
     let account = Storage.getItem("account");
-    const demo = (this.demo = !!account);
 
-    if (demo) {
-      // In demo mode, simply load the demo story
+    if (!account || !account._id) {
+      // In demo mode. App.js will simply load the demo story
       account = {};
-      // console.log("account:", account);
-
-      Courier.getData("story"); // no id given
     } else {
       // If the user has an account, get the account preferences
       Courier.getData("account", account);
     }
 
-    Store.setState({ account, demo });
+    Store.setState({ account });
     this.remove = Store.addListener(this.accountUpdate, this.filter);
   }
 
   accountUpdate(account) {
-    //acount = { account: <value> }
-    this.account = account.account
+    this.account = account
     Storage.setItem(account)
-
-    const demo = this.demo
-    if (this.account && !demo) {
-      Storage.setItem({ demo })
-    }
   }
 }
 

@@ -11,6 +11,9 @@ const initialState = {
 test("store can be initialized", () => {
   const success = store.initializeState(initialState);
 
+  // console.log(
+  //   "storeState", JSON.stringify(storeState, null, "  ")
+  // )
   expect(success).toBe(true)
 })
 
@@ -53,6 +56,10 @@ test("can set and remove listeners", () => {
 })
 
 test("can set certain values of storeState without affecting others", done => {
+
+  // console.log(
+  //   "store._getState()[0]", JSON.stringify(store._getState()[0], null, "  ")
+  // )
   const stateChange = {
     initial: "new state",
     nested: { several: { levels: "deeper" } },
@@ -93,6 +100,15 @@ test("can set certain values of storeState without affecting others", done => {
   }
 });
 
+test("can reset the Store to a given state", () => {
+  const success = store.initializeState(initialState);
+  expect(success).toBe(true);
+
+  const store_state = store._getState()[0];
+  expect(store_state).toEqual(initialState);
+
+  expect(storeState).toEqual(initialState);
+});
 
 test("can create a path that did not originally exist", done => {
   const leaf = {
@@ -156,7 +172,6 @@ test("can get callback from nested change with object", (done) => {
       expect(removedCount).toBe(1);
       // console.log("listener removed");
     } else {
-      expect(store.listeners.size).toBe(0);
       done();
     }
   }

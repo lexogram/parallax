@@ -34,7 +34,7 @@
  */
 
 // Components
-import Splash from "../components/splash";
+import Splash from "../components/Splash";
 import Request from "../components/request";
 import Title from "../components/title";
 import Endless from "../components/endless";
