@@ -45,7 +45,6 @@ const openApp = (parameters) => {
   const closeApp = (result) => {
     const { done, error, silent } = result
     server.close();
-
     if (!silent) {
       console.log(`Express server on port ${PORT} closed`);
     }
